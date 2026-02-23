@@ -1,0 +1,10 @@
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+terraform/providers/
+
+
+node_modules/
+
+.env
