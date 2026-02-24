@@ -1,0 +1,5 @@
+aws ecr get-login-password --region ap-south-1 | \
+docker login --username AWS --password-stdin 502456973815.dkr.ecr.ap-south-1.amazonaws.com
+
+docker tag chat-app:latest 502456973815.dkr.ecr.ap-south-1.amazonaws.com/chat-app:latest
+docker push 502456973815.dkr.ecr.ap-south-1.amazonaws.com/chat-app:latest
