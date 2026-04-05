@@ -1,0 +1,57 @@
+pipeline {
+  agent any
+
+  environment {
+    ACR_NAME = "chatappacr12345"
+    ACR_LOGIN = "chatappacr12345.azurecr.io"
+    IMAGE_NAME = "chat-app"
+  }
+
+  stages {
+
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build Image') {
+      steps {
+        sh '''
+        cd server
+        docker build -t $ACR_LOGIN/$IMAGE_NAME:$BUILD_NUMBER .
+        '''
+      }
+    }
+
+    stage('Push Image') {
+      steps {
+        sh '''
+        az acr login --name $ACR_NAME
+        docker push $ACR_LOGIN/$IMAGE_NAME:$BUILD_NUMBER
+        '''
+      }
+    }
+
+    stage('Deploy to AKS') {
+      steps {
+        sh '''
+        kubectl set image deployment/chat-app \
+        chat-app=$ACR_LOGIN/$IMAGE_NAME:$BUILD_NUMBER
+
+        kubectl rollout status deployment/chat-app
+        '''
+      }
+    }
+
+  }
+
+  post {
+    success {
+      echo "🚀 Deployment successful"
+    }
+    failure {
+      echo "❌ Deployment failed"
+    }
+  }
+}

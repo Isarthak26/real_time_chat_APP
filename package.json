@@ -1,0 +1,11 @@
+{
+  "name": "lks",
+  "version": "1.0.0",
+  "description": "## Overview The Real-Time Chat Application is a web-based messaging platform that allows users to engage in real-time text-based conversations. Built using Express.js for the backend and Socket.IO for real-time communication, this application provides a seamless chatting experience for users.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

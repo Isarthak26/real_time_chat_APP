@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-app
+  labels:
+    app: chat-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chat-app
+  template:
+    metadata:
+      labels:
+        app: chat-app
+    spec:
+      containers:
+        - name: chat-app
+          image: chatappacr12345.azurecr.io/chat-app:v2
+          ports:
+            - containerPort: 3500   # change if your app uses different port
+          imagePullPolicy: Always

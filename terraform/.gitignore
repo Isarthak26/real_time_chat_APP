@@ -1,0 +1,13 @@
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+terraform/providers/
+terraform.tfstate.backup
+.terraform/
+terraform.tfstate
+
+
+node_modules/
+
+.env
