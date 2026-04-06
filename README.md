@@ -1,53 +1,288 @@
-# Real-Time Chat Application
+# 🚀 Real-Time Chat Application — DevOps + Monitoring Project
 
-## Overview
-The Real-Time Chat Application is a web-based messaging platform that allows users to engage in real-time text-based conversations. Built using Express.js for the backend and Socket.IO for real-time communication, this application provides a seamless chatting experience for users.
+## 📌 Overview
 
-## Features
-- **Real-Time Communication**: Utilizes WebSocket technology through Socket.IO to enable instant messaging between users.
-- **User Authentication**: Supports user authentication to ensure secure access to the chat platform.
-- **Multiple Rooms**: Allows users to create and join different chat rooms, facilitating discussions on various topics.
-- **User Presence Indicators**: Displays indicators to show when users are online or typing messages in real-time.
+This project demonstrates a **production-grade DevOps pipeline** for deploying a real-time chat application on Azure, along with **monitoring using Prometheus and Grafana**.
 
-## Technologies Used
-- **Express.js**: A web application framework for Node.js used for building the backend server and handling HTTP requests.
-- **Socket.IO**: A JavaScript library for real-time web applications that enables bidirectional communication between clients and servers.
-- **HTML/CSS/JavaScript**: Frontend technologies used for building the user interface and enhancing interactivity.
-- **npm**: The package manager for Node.js used for installing and managing project dependencies.
+The application is containerized using Docker, deployed on Kubernetes (AKS), automated via Jenkins CI/CD, and monitored in real time.
 
-## Installation
-To run the Real-Time Chat Application locally, follow these steps:
-1. Clone the repository to your local machine:
-   ```bash
-   git clone https://github.com/yourusername/real-time-chat-app.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd real-time-chat-app
-   ```
-3. Navigate to the server directory:
-   ```bash
-   cd server
-   ```   
-4. Install dependencies using npm:
-   ```bash
-   npm install
-   ```
-5. Start the server:
-   ```bash
-   npm start
-   ```
-6. Access the application in your web browser at `http://localhost:3500`.
+---
 
-## Future Enhancements
-- **File Sharing**: Allow users to share files such as images, documents, and videos within chat rooms.
-- **Encryption**: Implement end-to-end encryption for secure messaging and data privacy.
-- **User Profiles**: Enable users to create profiles with avatars, bios, and status updates.
-- **Notifications**: Implement push notifications for new messages and mentions to keep users informed.
-- **Moderation Tools**: Provide tools for administrators to manage users, monitor conversations, and enforce community guidelines.
+# 🎯 Objective
 
-## User Interface
-https://realtimeschatapps.netlify.app/
+To build a complete DevOps system that includes:
 
-! The website above is only a frontend. !
-# real_time_chat_APP
+* Infrastructure provisioning using Terraform
+* CI/CD automation using Jenkins
+* Containerization using Docker
+* Deployment using Kubernetes (AKS)
+* Monitoring using Prometheus & Grafana
+
+---
+
+# 🧠 Architecture
+
+```text id="arc1"
+Developer → GitHub → Jenkins → Docker → ACR → AKS → Users
+                                                   ↓
+                                           Prometheus
+                                                   ↓
+                                                Grafana
+```
+
+---
+
+# ⚙️ Tech Stack
+
+## ☁️ Cloud & DevOps
+
+* Azure (AKS, ACR, VM)
+* Terraform (Infrastructure as Code)
+* Jenkins (CI/CD Pipeline)
+* Docker
+* Kubernetes
+
+## 🧑‍💻 Application
+
+* Node.js
+* Express.js
+* WebSockets (Real-time chat)
+
+## 📊 Monitoring
+
+* Prometheus
+* Grafana
+* kube-prometheus-stack (Helm)
+
+---
+
+# 📂 Project Structure
+
+```text id="struct1"
+├── server/
+│   ├── app.js
+│   ├── package.json
+│   └── Dockerfile
+│
+├── k8s/
+│   ├── deployment.yaml
+│   └── service.yaml
+│
+├── terraform/
+│   └── main.tf
+│
+├── Jenkinsfile
+└── README.md
+```
+
+---
+
+# 🚀 Infrastructure Setup (Terraform)
+
+Provision Azure resources:
+
+* Resource Group
+* AKS Cluster
+* ACR (Container Registry)
+
+```bash id="tf1"
+terraform init
+terraform plan
+terraform apply
+```
+
+---
+
+# 🐳 Docker Setup
+
+### Build image
+
+```bash id="dock1"
+docker build -t chat-app .
+```
+
+### Run locally
+
+```bash id="dock2"
+docker run -p 3500:3500 chat-app
+```
+
+---
+
+# ☸️ Kubernetes Deployment
+
+```bash id="k81"
+kubectl apply -f k8/
+```
+
+Check:
+
+```bash id="k82"
+kubectl get pods
+kubectl get svc
+```
+
+👉 Service type: `LoadBalancer`
+
+---
+
+# 🔁 CI/CD Pipeline (Jenkins)
+
+## Pipeline Stages
+
+1. Checkout code
+2. Build Docker image
+3. Push image to Azure Container Registry (ACR)
+4. Deploy to AKS
+
+### Sample Deployment Step
+
+```groovy id="jen1"
+stage('Deploy') {
+  steps {
+    sh '''
+    kubectl set image deployment/chat-app \
+    chat-app=$ACR/$IMAGE:$BUILD_NUMBER
+    '''
+  }
+}
+```
+
+---
+
+# 🌐 Access Application
+
+```text id="url1"
+http://<LoadBalancer-IP>
+```
+
+---
+
+# 📊 Monitoring & Observability
+
+This project integrates **Prometheus and Grafana** for real-time monitoring of Kubernetes workloads.
+
+---
+
+## 🔥 Install Monitoring Stack
+
+```bash id="mon1"
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install monitoring prometheus-community/kube-prometheus-stack
+```
+
+---
+
+## 🔍 Check Monitoring Pods
+
+```bash id="mon2"
+kubectl get pods
+```
+
+---
+
+## 📈 Access Grafana
+
+```bash id="mon3"
+kubectl port-forward svc/monitoring-grafana 3000:80
+```
+
+Open:
+
+```text id="url2"
+http://localhost:3000
+```
+
+---
+
+## 🔐 Grafana Login
+
+```text id="graf1"
+Username: admin
+Password:
+```
+
+Get password:
+
+```bash id="mon4"
+kubectl get secret monitoring-grafana \
+-o jsonpath="{.data.admin-password}" | base64 --decode
+```
+
+---
+
+## 📊 What You Can Monitor
+
+* Pod CPU usage
+* Memory usage
+* Node health
+* Kubernetes cluster metrics
+* Application performance
+
+---
+
+# 🎯 Key Features
+
+✔ Real-time chat system
+✔ Fully automated CI/CD pipeline
+✔ Docker-based containerization
+✔ Kubernetes deployment (AKS)
+✔ Cloud-native architecture
+✔ Monitoring with Prometheus & Grafana
+✔ Scalable infrastructure
+
+---
+
+# 🧪 Troubleshooting
+
+### ImagePullBackOff
+
+```bash id="tr1"
+az aks update --attach-acr <acr-name>
+```
+
+### Docker permission issue
+
+```bash id="tr2"
+sudo usermod -aG docker jenkins
+```
+
+### Kubernetes debug
+
+```bash id="tr3"
+kubectl describe pod <pod-name>
+```
+
+---
+
+# 🎯 What This Project Demonstrates
+
+* CI/CD automation using Jenkins
+* Infrastructure as Code (Terraform)
+* Container lifecycle management
+* Kubernetes orchestration
+* Cloud deployment on Azure
+* Monitoring and observability
+
+---
+
+# 🎤 Viva Explanation
+
+> “This project automates application deployment using Jenkins, Docker, and Kubernetes on Azure. It also integrates Prometheus and Grafana for monitoring system performance and health.”
+
+---
+
+# 🚀 Future Enhancements
+
+* Horizontal Pod Autoscaler (HPA)
+* Alerting (Slack/Email)
+* Helm charts
+* Blue-Green deployment
+* GitHub webhook triggers
+
+---
+
+# 👨‍💻 Author
+
+Sarthak Bordia
