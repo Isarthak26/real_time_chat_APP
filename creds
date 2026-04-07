@@ -1,3 +1,0 @@
-acr_login_server = "chatappacr12345.azurecr.io"
-aks_name = "chat-app-aks"
-resource_group = "chat-app-rg"
